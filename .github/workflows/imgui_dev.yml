@@ -236,20 +236,8 @@ jobs:
           mv -f ./update/Linux/* ./update_repo/Linux/
           mv -f ./update/Mac/* ./update_repo/Mac/
 
-      - name: Commit changes to update repo
-        shell: bash
-        run: |
-          cd ./update_repo
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git checkout --orphan squash HEAD
-          git add -A
-          git commit -m "Update binaries"
-
-      - name: Push changes to update repo
-        shell: bash
-        run: |
-          cd ./update_repo
-          git branch -M main
-          git remote set-url origin "https://oauth2:${{ secrets.PRIVATE_ACCESS_TOKEN }}@github.com/FanTranslatorsInternational/Kuriimu2-ImGuiForms-Update.git"
-          git push --force origin main
+      - name: Upload update_repo contents as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: update-repo-files     # 下载时的压缩包名称
+          path: ./update_repo          # 需要下载的文件夹路径
